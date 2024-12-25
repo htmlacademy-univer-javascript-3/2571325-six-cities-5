@@ -7,22 +7,25 @@ import LoginPage from '../../pages/login-page/login-page';
 import FavoritesPage from '../../pages/favorites-page/favorites-page';
 import OfferPage from '../../pages/offer-page/offer-page';
 import NotFound from '../../pages/not-found-page/not-found-page';
+import { Offer } from '../../types/offer';
 
-const OFFERS_COUNT = 5;
-const USER_STATUS_AUTHENTICATED = false;
+const USER_STATUS_AUTHENTICATED = true;
 
-const App: React.FC = () => (
+interface AppProps {
+  offers: Offer[];
+}
+
+const App: React.FC<AppProps> = ({ offers }) => (
   <BrowserRouter>
     <Routes>
-      <Route path={AppRoutes.Default} element={<MainPage offersCount={OFFERS_COUNT} />} />
+      <Route path={AppRoutes.Default} element={<MainPage offersCount={offers.length} offers={offers} />} />
       <Route path={AppRoutes.Login} element={<LoginPage />} />
       <Route path={AppRoutes.Favorites} element={(
         <PrivateRouter isAuthenticated={USER_STATUS_AUTHENTICATED}>
-          <FavoritesPage />
+          <FavoritesPage offers={offers} />
         </PrivateRouter>
       )}
       />
-      <Route path={AppRoutes.Favorites} element={<FavoritesPage />} />
       <Route path={AppRoutes.OfferId} element={<OfferPage />} />
       <Route path='*' element={<NotFound />} />
     </Routes>
