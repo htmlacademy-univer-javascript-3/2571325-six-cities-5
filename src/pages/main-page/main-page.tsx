@@ -1,59 +1,28 @@
-// src/components/MainPage/MainPage.tsx
-import React from 'react';
+import React, { useState } from 'react';
 import OffersList from '../../components/offers-list/offers-list';
 import { Offer } from '../../types/offer';
 import { Header } from '../../components/header/header';
+import Map from '../../components/map/map';
+import Tabs from '../../components/tabs/tabs';
 
 interface MainProps {
   offersCount: number;
   offers: Offer [];
 }
 
+const CITIES_TITLES = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
+
 const Main: React.FC<MainProps> = (props) => {
 
   const { offersCount, offers } = props;
+  const [activeCityIndex, setActiveCityIndex] = useState<number>(Math.floor(CITIES_TITLES.length / 2));
 
   return (
     <div className="page page--gray page--main">
       { Header }
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
-        <div className="tabs">
-          <section className="locations container">
-            <ul className="locations__list tabs__list">
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Paris</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Cologne</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Brussels</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item tabs__item--active">
-                  <span>Amsterdam</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Hamburg</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Dusseldorf</span>
-                </a>
-              </li>
-            </ul>
-          </section>
-        </div>
+        <Tabs citiesTitles={CITIES_TITLES} activeCityIndex={activeCityIndex} setActiveCityIndex={setActiveCityIndex} />
         <div className="cities">
           <div className="cities__places-container container">
             <section className="cities__places places">
@@ -79,7 +48,9 @@ const Main: React.FC<MainProps> = (props) => {
               </div>
             </section>
             <div className="cities__right-section">
-              <section className="cities__map map"></section>
+              <section>
+                <Map offers={offers} activeCityTitle={CITIES_TITLES[activeCityIndex]} />
+              </section>
             </div>
           </div>
         </div>

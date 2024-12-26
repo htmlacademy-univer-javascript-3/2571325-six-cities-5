@@ -1,3 +1,5 @@
+import { City } from './city';
+
 export type Offer = {
   id: number;
   name: string;
@@ -7,5 +9,5 @@ export type Offer = {
   rating: 1 | 2 | 3 | 4 | 5 ;
   img: string;
   type: 'Apartment' | 'Room';
-  city: string;
+  city: City;
 };
