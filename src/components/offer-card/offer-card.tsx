@@ -45,7 +45,9 @@ const OfferCard: React.FC<OfferCardProps> = ({offer}) => (
         </div>
       </div>
       <h2 className="place-card__name">
-        <a href="#">{offer.name}</a>
+        <Link to={`${AppRoutes.Offer}/:${offer.id}`}>
+          {offer.name}
+        </Link>
       </h2>
       <p className="place-card__type">{offer.type}</p>
     </div>

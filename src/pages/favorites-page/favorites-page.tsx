@@ -22,11 +22,11 @@ const FavoritesPage: React.FC<FavoritesProps> = ({ offers }) => {
             <ul className="favorites__list">
               {
                 cities.map((city) =>(
-                  <li className="favorites__locations-items" key={`${city}-items`}>
+                  <li className="favorites__locations-items" key={`${city.title}-items`}>
                     <div className="favorites__locations locations locations--current">
                       <div className="locations__item">
                         <a className="locations__item-link" href="#">
-                          <span>{city}</span>
+                          <span>{city.title}</span>
                         </a>
                       </div>
                     </div>

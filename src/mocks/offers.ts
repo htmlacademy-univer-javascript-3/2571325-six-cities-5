@@ -10,7 +10,14 @@ export const offersMock: Offer[] = [
     rating: 4,
     img: 'apartment-01.jpg',
     type: 'Apartment',
-    city: 'Amsterdam',
+    city: {
+      title: 'Amsterdam',
+      coordinates : {
+        latitude: 52.3909553943508,
+        longitude: 4.85309666406198,
+        zoom: 10,
+      }
+    }
   },
   {
     id: 2,
@@ -21,7 +28,14 @@ export const offersMock: Offer[] = [
     rating: 4,
     img: 'apartment-02.jpg',
     type: 'Apartment',
-    city: 'Amsterdam',
+    city: {
+      title: 'Amsterdam',
+      coordinates : {
+        latitude: 52.3609553943508,
+        longitude: 4.85309666406198,
+        zoom: 10,
+      }
+    }
   },
   {
     id: 3,
@@ -32,7 +46,14 @@ export const offersMock: Offer[] = [
     rating: 4,
     img: 'apartment-03.jpg',
     type: 'Room',
-    city: 'Amsterdam',
+    city: {
+      title: 'Amsterdam',
+      coordinates : {
+        latitude: 52.3909553943508,
+        longitude: 4.929309666406198,
+        zoom: 10,
+      }
+    }
   },
   {
     id: 4,
@@ -43,6 +64,13 @@ export const offersMock: Offer[] = [
     rating: 5,
     img: 'apartment-small-04.jpg',
     type: 'Apartment',
-    city: 'Cologne',
+    city: {
+      title: 'Cologne',
+      coordinates : {
+        latitude: 52.3809553943508,
+        longitude: 4.939309666406198,
+        zoom: 10,
+      }
+    }
   },
 ];
