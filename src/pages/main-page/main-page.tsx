@@ -1,33 +1,37 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import OffersList from '../../components/offers-list/offers-list';
 import { Offer } from '../../types/offer';
 import { Header } from '../../components/header/header';
 import Map from '../../components/map/map';
 import Tabs from '../../components/tabs/tabs';
-import { CITIES_TITLES } from '../../constants/city';
+import { Cities } from '../../constants/cities';
 
 interface MainProps {
-  offersCount: number;
   offers: Offer [];
+  cities: Cities[];
 }
 
-
 const Main: React.FC<MainProps> = (props) => {
+  const { offers, cities } = props;
+  const [activeCity, setActiveCity] = useState<Cities>(cities[0]);
+  const getFilteredOffesList = useCallback(() => offers.filter((offer) => offer.city.title === activeCity.toString()), [offers, activeCity]);
+  const [filteredOffersList, setFilteredOffersList] = useState<Offer[]>(getFilteredOffesList());
 
-  const { offersCount, offers } = props;
-  const [activeCityIndex, setActiveCityIndex] = useState<number>(Math.floor(CITIES_TITLES.length / 2));
+  useEffect(() => {
+    setFilteredOffersList(getFilteredOffesList());
+  }, [getFilteredOffesList]);
 
   return (
     <div className="page page--gray page--main">
       { Header }
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
-        <Tabs citiesTitles={CITIES_TITLES} activeCityIndex={activeCityIndex} setActiveCityIndex={setActiveCityIndex} />
+        <Tabs cities={cities} activeCity={activeCity} setActiveCity={setActiveCity} />
         <div className="cities">
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{`${offersCount} places to stay in Amsterdam`}</b>
+              <b className="places__found">{`${filteredOffersList.length} places to stay in ${activeCity}`}</b>
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex={0}>
@@ -43,11 +47,11 @@ const Main: React.FC<MainProps> = (props) => {
                   <li className="places__option" tabIndex={0}>Top rated first</li>
                 </ul>
               </form>
-              <OffersList offers={offers} />
+              <OffersList offers={filteredOffersList} />
             </section>
             <div className="cities__right-section">
               <section>
-                <Map width={'512px'} height={'100%'} offers={offers} activeCityTitle={CITIES_TITLES[activeCityIndex]} />
+                <Map width={'512px'} height={'100%'} offers={filteredOffersList} activeCityTitle={activeCity} />
               </section>
             </div>
           </div>
