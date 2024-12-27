@@ -20,7 +20,7 @@ const CommentForm: React.FC<CommentFormProps> = () => {
     setFormValue({ ...formValue, value: event.target.value });
   };
 
-  const handleSubmitClick = (e : Event) => {
+  const handleSubmitClick = (e : React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
   };
 
