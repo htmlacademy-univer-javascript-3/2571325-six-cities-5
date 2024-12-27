@@ -57,12 +57,30 @@ export const offersMock: Offer[] = [
   },
   {
     id: 4,
+    name: 'Canal View Prinsengracht',
+    price: 132,
+    isPremium: false,
+    isFavorite: false,
+    rating: 4,
+    img: 'apartment-01.jpg',
+    type: 'Apartment',
+    city: {
+      title: 'Amsterdam',
+      coordinates : {
+        latitude: 52.3909553943508,
+        longitude: 4.829309666406198,
+        zoom: 10,
+      }
+    }
+  },
+  {
+    id: 5,
     name: 'Nice, cozy, warm big bed apartment',
     price: 180,
     isPremium: true,
     isFavorite: false,
     rating: 5,
-    img: 'apartment-small-04.jpg',
+    img: 'apartment-02.jpg',
     type: 'Apartment',
     city: {
       title: 'Cologne',

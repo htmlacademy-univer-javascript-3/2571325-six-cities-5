@@ -7,7 +7,7 @@ interface FavoritesOffersListProps {
 }
 
 const FavoritesOffersList: React.FC<FavoritesOffersListProps> = ({offers}) => offers.map((offer) => (
-  <FavoriteOfferCard key={offer.id} offer={offer} />
+  <FavoriteOfferCard key={`${offer.id}`} offer={offer} />
 ));
 
 export default FavoritesOffersList;

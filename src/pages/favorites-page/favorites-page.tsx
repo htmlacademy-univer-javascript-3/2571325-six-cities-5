@@ -10,7 +10,7 @@ interface FavoritesProps {
 }
 
 const FavoritesPage: React.FC<FavoritesProps> = ({ offers }) => {
-  const cities = [...new Set(offers.map((offer) => offer.city))];
+  const cities = [...new Set(offers.map((offer) => offer.city.title))];
 
   return (
     <div className="page">
@@ -22,17 +22,17 @@ const FavoritesPage: React.FC<FavoritesProps> = ({ offers }) => {
             <ul className="favorites__list">
               {
                 cities.map((city) =>(
-                  <li className="favorites__locations-items" key={`${city.title}-items`}>
+                  <li className="favorites__locations-items" key={`${city}`}>
                     <div className="favorites__locations locations locations--current">
                       <div className="locations__item">
                         <a className="locations__item-link" href="#">
-                          <span>{city.title}</span>
+                          <span>{city}</span>
                         </a>
                       </div>
                     </div>
                     <div className="favorites__places">
                       {
-                        <FavoritesOffersList offers={offers.filter((offer) => offer.city === city)} />
+                        <FavoritesOffersList offers={offers.filter((offer) => offer.city.title === city)} />
                       }
                     </div>
                   </li>

@@ -8,14 +8,16 @@ import FavoritesPage from '../../pages/favorites-page/favorites-page';
 import OfferPage from '../../pages/offer-page/offer-page';
 import NotFound from '../../pages/not-found-page/not-found-page';
 import { Offer } from '../../types/offer';
+import { Review } from '../../types/review';
 
 const USER_STATUS_AUTHENTICATED = true;
 
 interface AppProps {
   offers: Offer[];
+  reviews: Review[];
 }
 
-const App: React.FC<AppProps> = ({ offers }) => (
+const App: React.FC<AppProps> = ({ offers, reviews }) => (
   <BrowserRouter>
     <Routes>
       <Route path={AppRoutes.Default} element={<MainPage offersCount={offers.length} offers={offers} />} />
@@ -26,7 +28,7 @@ const App: React.FC<AppProps> = ({ offers }) => (
         </PrivateRouter>
       )}
       />
-      <Route path={AppRoutes.OfferId} element={<OfferPage />} />
+      <Route path={AppRoutes.OfferId} element={<OfferPage reviews={reviews} offers={offers} />} />
       <Route path='*' element={<NotFound />} />
     </Routes>
   </BrowserRouter>

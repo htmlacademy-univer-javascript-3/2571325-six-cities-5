@@ -6,11 +6,13 @@ import { Offer } from '../../types/offer';
 import { defaultCustomIcon } from '../../constants/map';
 
 interface MapProps {
+  width: string;
+  height: string;
   offers: Offer[];
   activeCityTitle: string;
 }
 
-const Map: React.FC<MapProps> = ({ offers, activeCityTitle }) => {
+const Map: React.FC<MapProps> = ({ width, height, offers, activeCityTitle }) => {
   const currCity = offers.find((offer) => offer.city.title === activeCityTitle)?.city || null;
   const points = offers.filter((offer) => offer.city.title === activeCityTitle).map((offer) => offer.city.coordinates);
   const mapRef = useRef<HTMLDivElement>(null);
@@ -33,7 +35,7 @@ const Map: React.FC<MapProps> = ({ offers, activeCityTitle }) => {
 
   return (
     <div
-      style={{ height: '100%', width: '512px' }}
+      style={{ height: height, width: width }}
       ref={mapRef}
     />
   );

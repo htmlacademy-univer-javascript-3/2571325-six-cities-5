@@ -10,4 +10,10 @@ export type Offer = {
   img: string;
   type: 'Apartment' | 'Room';
   city: City;
-};
+}
+
+export enum OfferType {
+  Nearby = 'nearby',
+  Favorite = 'favorite',
+  Defaulte = 'default',
+}

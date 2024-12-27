@@ -4,13 +4,13 @@ import { Offer } from '../../types/offer';
 import { Header } from '../../components/header/header';
 import Map from '../../components/map/map';
 import Tabs from '../../components/tabs/tabs';
+import { CITIES_TITLES } from '../../constants/city';
 
 interface MainProps {
   offersCount: number;
   offers: Offer [];
 }
 
-const CITIES_TITLES = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
 
 const Main: React.FC<MainProps> = (props) => {
 
@@ -43,13 +43,11 @@ const Main: React.FC<MainProps> = (props) => {
                   <li className="places__option" tabIndex={0}>Top rated first</li>
                 </ul>
               </form>
-              <div className="cities__places-list places__list tabs__content">
-                <OffersList offers={offers} />
-              </div>
+              <OffersList offers={offers} />
             </section>
             <div className="cities__right-section">
               <section>
-                <Map offers={offers} activeCityTitle={CITIES_TITLES[activeCityIndex]} />
+                <Map width={'512px'} height={'100%'} offers={offers} activeCityTitle={CITIES_TITLES[activeCityIndex]} />
               </section>
             </div>
           </div>
