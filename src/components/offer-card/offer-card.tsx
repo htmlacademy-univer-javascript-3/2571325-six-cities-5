@@ -6,6 +6,7 @@ import { AppRoutes } from '../../constants/routers';
 interface OfferCardProps {
   offer: Offer;
   cardType?: string;
+  setOnHoverOfferId: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
 enum ClassName {
@@ -14,7 +15,8 @@ enum ClassName {
   Default = 'cities',
 }
 
-const OfferCard: React.FC<OfferCardProps> = ({offer, cardType = OfferType.Defaulte}) => {
+const OfferCard: React.FC<OfferCardProps> = (props) => {
+  const {offer, cardType = OfferType.Defaulte, setOnHoverOfferId} = props;
   const getClassName = (type : string) => {
     switch(type){
       case OfferType.Nearby:
@@ -27,8 +29,16 @@ const OfferCard: React.FC<OfferCardProps> = ({offer, cardType = OfferType.Defaul
   };
   const cardClassName = getClassName(cardType);
 
+  const handleIsHoverOffer = () =>{
+    setOnHoverOfferId(offer.id);
+  };
+
+  const handleOutHoverOffer = () =>{
+    setOnHoverOfferId(null);
+  };
+
   return (
-    <article className={`${cardClassName}__card place-card`}>
+    <article className={`${cardClassName}__card place-card`} onMouseOver={handleIsHoverOffer} onMouseOut={handleOutHoverOffer}>
       {offer.isPremium && (
         <div className="place-card__mark">
           <span>Premium</span>
