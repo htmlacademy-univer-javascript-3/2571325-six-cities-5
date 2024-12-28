@@ -11,18 +11,18 @@ interface MapProps {
   height: string;
   offers: Offer[];
   activeCityTitle: string;
-  onHoverOfferId?: number | null;
+  onHoverOfferId?: string | null;
 }
 
 const Map: React.FC<MapProps> = (props) => {
   const { width, height, offers, activeCityTitle, onHoverOfferId = null } = props;
   const getPoints = useCallback(
-    (offersList: Offer[], onHoverOfferIdItem: number | null) =>
+    (offersList: Offer[], onHoverOfferIdItem: string | null) =>
       offersList
         .filter((offer) => offer.city.name === activeCityTitle)
         .map((offer) => ({
           ...offer.location,
-          isDefault: offer.id !== onHoverOfferIdItem,
+          isDefault: offer.id !== onHoverOfferIdItem?.toString(),
         })),
     [activeCityTitle]
   );

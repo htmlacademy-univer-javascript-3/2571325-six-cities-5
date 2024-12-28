@@ -21,7 +21,7 @@ const Main: React.FC<MainProps> = (props) => {
   const { cities } = props;
   const [isOpenSortingMenu, setIsOpenSortingMenu] = useState<boolean>(false);
   const [sortingType, setSortingType] = useState<SortingType>(SortingType.Popular);
-  const [onHoverOfferId, setOnHoverOfferId] = useState<number | null>(null);
+  const [onHoverOfferId, setOnHoverOfferId] = useState<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
   const offers = useSelector((state: RootState) => state.offers);
   const activeCity = useSelector((state: RootState) => state.city);

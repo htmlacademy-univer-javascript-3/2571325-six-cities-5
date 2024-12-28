@@ -6,7 +6,7 @@ import { AppRoutes } from '../../constants/routers';
 interface OfferCardProps {
   offer: Offer;
   cardType?: string;
-  setOnHoverOfferId?: React.Dispatch<React.SetStateAction<number | null>>;
+  setOnHoverOfferId?: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 enum ClassName {
