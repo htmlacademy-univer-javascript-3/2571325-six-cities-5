@@ -6,7 +6,7 @@ import ReviewList from '../../components/reviews-list/reviews-list';
 import Map from '../../components/map/map';
 import { Review } from '../../types/review';
 import { Offer } from '../../types/offer';
-import { CITIES_TITLES } from '../../constants/city';
+import { Cities } from '../../constants/cities';
 import NearbyOffersList from '../../components/nearby-offers-list/nearby-offers-list';
 
 interface Props {
@@ -154,7 +154,7 @@ const OfferPage: React.FC<Props> = ({reviews, offers}) => {
             </div>
           </div>
           <section className="offer__map map" style={{ display: 'flex', justifyContent: 'center'}}>
-            <Map width={'1144px'} height={'579px'} offers={offers} activeCityTitle={CITIES_TITLES[Math.floor(CITIES_TITLES.length / 2)]} />
+            <Map width={'1144px'} height={'579px'} offers={offers} activeCityTitle={Cities.Paris} />
           </section>
         </section>
         <div className="container">

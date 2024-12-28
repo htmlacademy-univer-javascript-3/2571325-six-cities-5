@@ -85,8 +85,8 @@ export const offersMock: Offer[] = [
     city: {
       title: 'Cologne',
       coordinates : {
-        latitude: 52.3809553943508,
-        longitude: 4.939309666406198,
+        latitude: 50.933,
+        longitude: 6.950,
         zoom: 10,
       }
     }
