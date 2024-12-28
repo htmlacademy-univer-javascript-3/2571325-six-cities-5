@@ -11,11 +11,11 @@ interface MapProps {
   height: string;
   offers: Offer[];
   activeCityTitle: string;
-  onHoverOfferId: number | null;
+  onHoverOfferId?: number | null;
 }
 
 const Map: React.FC<MapProps> = (props) => {
-  const { width, height, offers, activeCityTitle, onHoverOfferId } = props;
+  const { width, height, offers, activeCityTitle, onHoverOfferId = null } = props;
   const getPoints = useCallback(
     (offersList: Offer[], onHoverOfferIdItem: number | null) =>
       offersList

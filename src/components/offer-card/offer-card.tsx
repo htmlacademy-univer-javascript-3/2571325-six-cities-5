@@ -6,7 +6,7 @@ import { AppRoutes } from '../../constants/routers';
 interface OfferCardProps {
   offer: Offer;
   cardType?: string;
-  setOnHoverOfferId: React.Dispatch<React.SetStateAction<number | null>>;
+  setOnHoverOfferId?: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
 enum ClassName {
@@ -30,11 +30,15 @@ const OfferCard: React.FC<OfferCardProps> = (props) => {
   const cardClassName = getClassName(cardType);
 
   const handleIsHoverOffer = () =>{
-    setOnHoverOfferId(offer.id);
+    if(setOnHoverOfferId) {
+      setOnHoverOfferId(offer.id);
+    }
   };
 
   const handleOutHoverOffer = () =>{
-    setOnHoverOfferId(null);
+    if(setOnHoverOfferId) {
+      setOnHoverOfferId(null);
+    }
   };
 
   return (
