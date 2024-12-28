@@ -43,7 +43,7 @@ export const offersMock: Offer[] = [
     price: 132,
     isPremium: false,
     isFavorite: false,
-    rating: 4,
+    rating: 3,
     img: 'apartment-03.jpg',
     type: 'Room',
     city: {

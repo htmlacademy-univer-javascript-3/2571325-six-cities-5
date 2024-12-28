@@ -154,7 +154,7 @@ const OfferPage: React.FC<Props> = ({reviews, offers}) => {
             </div>
           </div>
           <section className="offer__map map" style={{ display: 'flex', justifyContent: 'center'}}>
-            <Map width={'1144px'} height={'579px'} offers={offers} activeCityTitle={Cities.Paris} />
+            <Map width={'1144px'} height={'579px'} offers={offers} activeCityTitle={currOffer?.city.title || Cities.Paris} />
           </section>
         </section>
         <div className="container">

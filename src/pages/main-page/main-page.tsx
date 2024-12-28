@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import OffersList from '../../components/offers-list/offers-list';
 import { Offer } from '../../types/offer';
+import { SortingType } from '../../types/sort';
 import { Header } from '../../components/header/header';
 import Map from '../../components/map/map';
 import Tabs from '../../components/tabs/tabs';
 import { Cities } from '../../constants/cities';
+import SortingMenu from '../../components/sorting-menu/sorting-menu';
 
 interface MainProps {
   offers: Offer [];
@@ -13,13 +15,35 @@ interface MainProps {
 
 const Main: React.FC<MainProps> = (props) => {
   const { offers, cities } = props;
-  const [activeCity, setActiveCity] = useState<Cities>(cities[0]);
-  const getFilteredOffesList = useCallback(() => offers.filter((offer) => offer.city.title === activeCity.toString()), [offers, activeCity]);
-  const [filteredOffersList, setFilteredOffersList] = useState<Offer[]>(getFilteredOffesList());
+  const [activeCity, setActiveCity] = useState<Cities>(cities[3]);
+  const [isOpenSortingMenu, setIsOpenSortingMenu] = useState<boolean>(false);
+  const [sortingType, setSortingType] = useState<SortingType>(SortingType.Popular);
+  const [onHoverOfferId, setOnHoverOfferId] = useState<number | null>(null);
+
+  const getFilteredOffersList = useCallback(() => offers.filter((offer) => offer.city.title === activeCity.toString()),
+    [offers, activeCity]
+  );
+
+  const [filteredOffersList, setFilteredOffersList] = useState<Offer[]>(getFilteredOffersList());
+
+  const sortOffers = useCallback((offersToSort: Offer[]) => {
+    switch (sortingType) {
+      case SortingType.LowToHight:
+        return [...offersToSort].sort((a, b) => a.price - b.price);
+      case SortingType.HightToLow:
+        return [...offersToSort].sort((a, b) => b.price - a.price);
+      case SortingType.TopRating:
+        return [...offersToSort].sort((a, b) => b.rating - a.rating);
+      default:
+        return offersToSort;
+    }
+  }, [sortingType]);
 
   useEffect(() => {
-    setFilteredOffersList(getFilteredOffesList());
-  }, [getFilteredOffesList]);
+    const filtered = getFilteredOffersList();
+    const sorted = sortOffers(filtered);
+    setFilteredOffersList(sorted);
+  }, [sortingType, getFilteredOffersList, sortOffers]);
 
   return (
     <div className="page page--gray page--main">
@@ -32,26 +56,17 @@ const Main: React.FC<MainProps> = (props) => {
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
               <b className="places__found">{`${filteredOffersList.length} places to stay in ${activeCity}`}</b>
-              <form className="places__sorting" action="#" method="get">
-                <span className="places__sorting-caption">Sort by</span>
-                <span className="places__sorting-type" tabIndex={0}>
-                  Popular
-                  <svg className="places__sorting-arrow" width="7" height="4">
-                    <use xlinkHref="#icon-arrow-select"></use>
-                  </svg>
-                </span>
-                <ul className="places__options places__options--custom places__options--opened">
-                  <li className="places__option places__option--active" tabIndex={0}>Popular</li>
-                  <li className="places__option" tabIndex={0}>Price: low to high</li>
-                  <li className="places__option" tabIndex={0}>Price: high to low</li>
-                  <li className="places__option" tabIndex={0}>Top rated first</li>
-                </ul>
-              </form>
-              <OffersList offers={filteredOffersList} />
+              <SortingMenu
+                isOpenSortingMenu={isOpenSortingMenu}
+                setIsOpenSortingMenu={setIsOpenSortingMenu}
+                sortingType={sortingType}
+                setSortingType={setSortingType}
+              />
+              <OffersList offers={filteredOffersList} setOnHoverOfferId={setOnHoverOfferId} />
             </section>
             <div className="cities__right-section">
               <section>
-                <Map width={'512px'} height={'100%'} offers={filteredOffersList} activeCityTitle={activeCity} />
+                <Map width={'512px'} height={'100%'} offers={filteredOffersList} activeCityTitle={activeCity} onHoverOfferId={onHoverOfferId} />
               </section>
             </div>
           </div>

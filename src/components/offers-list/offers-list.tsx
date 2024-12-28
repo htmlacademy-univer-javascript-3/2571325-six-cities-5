@@ -4,13 +4,14 @@ import { Offer, OfferType } from '../../types/offer';
 
 interface OffersListProps {
   offers: Offer[];
+  setOnHoverOfferId: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
-const OffersList: React.FC<OffersListProps> = ({ offers }) => (
+const OffersListId: React.FC<OffersListProps> = ({ offers, setOnHoverOfferId }) => (
   <div className='cities__places-list places__list tabs__content'>
     {offers.map((offer) => (
-      <OfferCard key={`${offer.id}`} offer={offer} cardType={OfferType.Defaulte} />
+      <OfferCard key={`${offer.id}`} offer={offer} cardType={OfferType.Defaulte} setOnHoverOfferId={setOnHoverOfferId} />
     ))}
   </div>
 );
-export default OffersList;
+export default OffersListId;
