@@ -1,15 +1,24 @@
 import React from 'react';
 import Tab from '../tab/tab';
 import { Cities } from '../../constants/cities';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../../store';
+import { changeCity } from '../../store/action';
+import { RootState } from '../../store';
 
 interface TabsProps {
   cities: Cities[];
-  activeCity: Cities;
-  setActiveCity: (city: Cities) => void;
 }
 
-const Tabs: React.FC<TabsProps> = ({ cities, activeCity, setActiveCity }) => {
+const Tabs: React.FC<TabsProps> = ({ cities }) => {
   const citiesValues = Object.values(cities);
+  const dispatch = useDispatch<AppDispatch>();
+  const activeCity = useSelector((state: RootState) => state.city);
+
+  const handleChangeActiveCity = (city: Cities) => {
+    dispatch(changeCity(city));
+  };
+
   return (
     <div className="tabs">
       <section className="locations container">
@@ -20,7 +29,7 @@ const Tabs: React.FC<TabsProps> = ({ cities, activeCity, setActiveCity }) => {
                 key={city}
                 cityTitle={city}
                 isActiveCity={activeCity === city}
-                handleChangeActiveCity={() => setActiveCity(city)}
+                handleChangeActiveCity={() => handleChangeActiveCity(city)}
               />
             ))
           }

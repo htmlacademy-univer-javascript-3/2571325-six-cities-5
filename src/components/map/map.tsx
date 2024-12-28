@@ -19,14 +19,14 @@ const Map: React.FC<MapProps> = (props) => {
   const getPoints = useCallback(
     (offersList: Offer[], onHoverOfferIdItem: number | null) =>
       offersList
-        .filter((offer) => offer.city.title === activeCityTitle)
+        .filter((offer) => offer.city.name === activeCityTitle)
         .map((offer) => ({
-          ...offer.city.coordinates,
+          ...offer.location,
           isDefault: offer.id !== onHoverOfferIdItem,
         })),
     [activeCityTitle]
   );
-  const currCity = offers.find((offer) => offer.city.title === activeCityTitle)?.city || null;
+  const currCity = offers.find((offer) => offer.city.name === activeCityTitle)?.city || null;
   const [points, setPoints] = useState<Point[]>(getPoints(offers, onHoverOfferId));
   const mapRef = useRef<HTMLDivElement>(null);
   const map = useMap({ mapRef, city: currCity });

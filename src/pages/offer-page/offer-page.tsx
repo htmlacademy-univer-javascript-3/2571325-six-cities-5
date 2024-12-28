@@ -5,19 +5,20 @@ import CommentForm from '../../components/comment-form/comment-form';
 import ReviewList from '../../components/reviews-list/reviews-list';
 import Map from '../../components/map/map';
 import { Review } from '../../types/review';
-import { Offer } from '../../types/offer';
-import { Cities } from '../../constants/cities';
 import NearbyOffersList from '../../components/nearby-offers-list/nearby-offers-list';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 interface Props {
   reviews: Review[];
-  offers: Offer[];
 }
 
-const OfferPage: React.FC<Props> = ({reviews, offers}) => {
+const OfferPage: React.FC<Props> = ({reviews}) => {
   const location = useLocation();
-  const currOffer = offers.find((offer) => offer.id === +location.pathname.split(':')[1]);
-  const nearbyOffers = offers.filter((offer) => offer.city.title === currOffer?.city.title)?.slice(0, 3);
+  const offers = useSelector((state: RootState) => state.offers);
+  const activeCity = useSelector((state: RootState) => state.city);
+  const currOffer = offers.find((offer) => offer.id === location.pathname.split(':')[1]);
+  const nearbyOffers = offers.filter((offer) => offer.city.name === currOffer?.city.name)?.slice(0, 3);
 
   return (
     <div className="page">
@@ -53,7 +54,7 @@ const OfferPage: React.FC<Props> = ({reviews, offers}) => {
               </div>
               <div className="offer__name-wrapper">
                 <h1 className="offer__name">
-                  {currOffer?.name ?? 'No Name'}
+                  {currOffer?.title ?? 'No Name'}
                 </h1>
                 <button className="offer__bookmark-button button" type="button">
                   <svg className="offer__bookmark-icon" width="31" height="33">
@@ -154,7 +155,7 @@ const OfferPage: React.FC<Props> = ({reviews, offers}) => {
             </div>
           </div>
           <section className="offer__map map" style={{ display: 'flex', justifyContent: 'center'}}>
-            <Map width={'1144px'} height={'579px'} offers={offers} activeCityTitle={currOffer?.city.title || Cities.Paris} />
+            <Map width={'1144px'} height={'579px'} offers={offers} activeCityTitle={activeCity} />
           </section>
         </section>
         <div className="container">
