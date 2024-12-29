@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import OffersList from '../../components/offers-list/offers-list';
 import { Offer } from '../../types/offer';
 import { SortingType } from '../../types/sort';
-import { Header } from '../../components/header/header';
+import Header from '../../components/header/header';
 import Map from '../../components/map/map';
 import Tabs from '../../components/tabs/tabs';
 import { Cities } from '../../constants/cities';
@@ -26,7 +26,6 @@ const Main: React.FC<MainProps> = (props) => {
   const offers = useSelector((state: RootState) => state.offers);
   const activeCity = useSelector((state: RootState) => state.city);
   const isLoading = useSelector((state: RootState) => state.isLoading);
-
   useEffect(() => {
     dispatch(fetchOffers(activeCity));
   }, [dispatch, activeCity]);
@@ -58,7 +57,7 @@ const Main: React.FC<MainProps> = (props) => {
 
   return (
     <div className="page page--gray page--main">
-      { Header }
+      <Header />
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
         <Tabs cities={cities} />
