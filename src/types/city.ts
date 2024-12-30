@@ -1,6 +1,6 @@
 export type City = {
-  title: string;
-  coordinates : {
+  name: string;
+  location : {
     latitude: number;
     longitude: number;
     zoom: number;

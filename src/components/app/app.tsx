@@ -9,31 +9,29 @@ import LoginPage from '../../pages/login-page/login-page';
 import FavoritesPage from '../../pages/favorites-page/favorites-page';
 import OfferPage from '../../pages/offer-page/offer-page';
 import NotFound from '../../pages/not-found-page/not-found-page';
-import { Offer } from '../../types/offer';
 import { Review } from '../../types/review';
 import { Cities } from '../../constants/cities';
 
 const USER_STATUS_AUTHENTICATED = true;
 
 interface AppProps {
-  offers: Offer[];
   reviews: Review[];
   cities: Cities[];
 }
 
-const App: React.FC<AppProps> = ({ offers, reviews, cities }) => (
+const App: React.FC<AppProps> = ({ reviews, cities }) => (
   <Provider store={store}>
     <BrowserRouter>
       <Routes>
-        <Route path={AppRoutes.Default} element={<MainPage offers={offers} cities={cities} />} />
+        <Route path={AppRoutes.Default} element={<MainPage cities={cities} />} />
         <Route path={AppRoutes.Login} element={<LoginPage />} />
         <Route path={AppRoutes.Favorites} element={(
           <PrivateRouter isAuthenticated={USER_STATUS_AUTHENTICATED}>
-            <FavoritesPage offers={offers} />
+            <FavoritesPage />
           </PrivateRouter>
         )}
         />
-        <Route path={AppRoutes.OfferId} element={<OfferPage reviews={reviews} offers={offers} />} />
+        <Route path={AppRoutes.OfferId} element={<OfferPage reviews={reviews} />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
     </BrowserRouter>

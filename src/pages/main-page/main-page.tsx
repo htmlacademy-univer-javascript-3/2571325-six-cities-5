@@ -7,20 +7,31 @@ import Map from '../../components/map/map';
 import Tabs from '../../components/tabs/tabs';
 import { Cities } from '../../constants/cities';
 import SortingMenu from '../../components/sorting-menu/sorting-menu';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../store';
+import { fetchOffers } from '../../store/action';
+import { AppDispatch } from '../../store';
+import Spinner from '../../components/spinner/spinner';
 
 interface MainProps {
-  offers: Offer [];
   cities: Cities[];
 }
 
 const Main: React.FC<MainProps> = (props) => {
-  const { offers, cities } = props;
-  const [activeCity, setActiveCity] = useState<Cities>(cities[3]);
+  const { cities } = props;
   const [isOpenSortingMenu, setIsOpenSortingMenu] = useState<boolean>(false);
   const [sortingType, setSortingType] = useState<SortingType>(SortingType.Popular);
-  const [onHoverOfferId, setOnHoverOfferId] = useState<number | null>(null);
+  const [onHoverOfferId, setOnHoverOfferId] = useState<string | null>(null);
+  const dispatch = useDispatch<AppDispatch>();
+  const offers = useSelector((state: RootState) => state.offers);
+  const activeCity = useSelector((state: RootState) => state.city);
+  const isLoading = useSelector((state: RootState) => state.isLoading);
 
-  const getFilteredOffersList = useCallback(() => offers.filter((offer) => offer.city.title === activeCity.toString()),
+  useEffect(() => {
+    dispatch(fetchOffers(activeCity));
+  }, [dispatch, activeCity]);
+
+  const getFilteredOffersList = useCallback(() => offers.filter((offer) => offer.city.name === activeCity.toString()),
     [offers, activeCity]
   );
 
@@ -43,14 +54,14 @@ const Main: React.FC<MainProps> = (props) => {
     const filtered = getFilteredOffersList();
     const sorted = sortOffers(filtered);
     setFilteredOffersList(sorted);
-  }, [sortingType, getFilteredOffersList, sortOffers]);
+  }, [sortingType, getFilteredOffersList, sortOffers, activeCity]);
 
   return (
     <div className="page page--gray page--main">
       { Header }
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
-        <Tabs cities={cities} activeCity={activeCity} setActiveCity={setActiveCity} />
+        <Tabs cities={cities} />
         <div className="cities">
           <div className="cities__places-container container">
             <section className="cities__places places">
@@ -62,7 +73,9 @@ const Main: React.FC<MainProps> = (props) => {
                 sortingType={sortingType}
                 setSortingType={setSortingType}
               />
-              <OffersList offers={filteredOffersList} setOnHoverOfferId={setOnHoverOfferId} />
+              {
+                isLoading ? <Spinner /> : <OffersList offers={filteredOffersList} setOnHoverOfferId={setOnHoverOfferId} />
+              }
             </section>
             <div className="cities__right-section">
               <section>

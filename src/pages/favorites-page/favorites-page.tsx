@@ -1,16 +1,22 @@
-import React from 'react';
+import React, { useEffect} from 'react';
 import { Link } from 'react-router-dom';
-import { Offer } from '../../types/offer';
 import FavoritesOffersList from '../../components/favorites-offers-list/favorites-offers-list';
 import { Header } from '../../components/header/header';
 import { AppRoutes } from '../../constants/routers';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../store';
+import { fetchFavoritesOffers } from '../../store/action';
 
-interface FavoritesProps {
-  offers: Offer[];
-}
+interface FavoritesProps {}
 
-const FavoritesPage: React.FC<FavoritesProps> = ({ offers }) => {
-  const cities = [...new Set(offers.map((offer) => offer.city.title))];
+const FavoritesPage: React.FC<FavoritesProps> = () => {
+  const offers = useSelector((state: RootState) => state.favoritesOffers);
+  const cities = [...new Set(offers.map((offer) => offer.city.name))];
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(fetchFavoritesOffers());
+  }, [dispatch, offers]);
 
   return (
     <div className="page">
@@ -32,7 +38,7 @@ const FavoritesPage: React.FC<FavoritesProps> = ({ offers }) => {
                     </div>
                     <div className="favorites__places">
                       {
-                        <FavoritesOffersList offers={offers.filter((offer) => offer.city.title === city)} />
+                        <FavoritesOffersList offers={offers.filter((offer) => offer.city.name === city)} />
                       }
                     </div>
                   </li>

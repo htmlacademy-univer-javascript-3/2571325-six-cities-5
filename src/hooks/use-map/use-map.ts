@@ -15,10 +15,10 @@ export function useMap({ mapRef, city }: UseMapProps): Map | null {
     if (mapRef.current !== null && !isRenderedRef.current && city !== null) {
       const instance = leaflet.map(mapRef.current, {
         center: {
-          lat: city.coordinates.latitude,
-          lng: city.coordinates.longitude,
+          lat: city.location.latitude,
+          lng: city.location.longitude,
         },
-        zoom: city.coordinates.zoom,
+        zoom: city.location.zoom,
       });
 
       leaflet
@@ -39,10 +39,10 @@ export function useMap({ mapRef, city }: UseMapProps): Map | null {
     if (map && city !== null) {
       map.setView(
         {
-          lat: city.coordinates.latitude,
-          lng: city.coordinates.longitude,
+          lat: city.location.latitude,
+          lng: city.location.longitude,
         },
-        city.coordinates.zoom
+        city.location.zoom
       );
     }
   }, [map, city]);
