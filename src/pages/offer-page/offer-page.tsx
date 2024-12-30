@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { Header } from '../../components/header/header';
+import Header from '../../components/header/header';
 import CommentForm from '../../components/comment-form/comment-form';
 import ReviewList from '../../components/reviews-list/reviews-list';
 import Map from '../../components/map/map';
@@ -22,7 +22,7 @@ const OfferPage: React.FC<Props> = ({reviews}) => {
 
   return (
     <div className="page">
-      { Header }
+      <Header />
       <main className="page__main page__main--offer">
         <section className="offer">
           <div className="offer__gallery-container container">

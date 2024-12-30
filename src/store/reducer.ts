@@ -2,7 +2,9 @@ import { createReducer } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { Offer } from '../types/offer';
 import { Cities } from '../constants/cities';
-import { fetchOffers, fetchFavoritesOffers, changeCity } from './action';
+import { fetchOffers, fetchFavoritesOffers, changeCity, checkAuthAction, loginAction, logoutAction } from './action';
+import { AuthorizationStatus } from '../constants/auth';
+import { UserInfo } from '../types/auth';
 
 type OffresListState = {
   offers: Offer[];
@@ -10,6 +12,8 @@ type OffresListState = {
   city: Cities;
   isLoading: boolean;
   error: string | null;
+  authorizationStatus: AuthorizationStatus;
+  userInfo: UserInfo | null;
 };
 
 const initialState: OffresListState = {
@@ -18,6 +22,8 @@ const initialState: OffresListState = {
   city: Cities.Paris,
   isLoading: false,
   error: null,
+  authorizationStatus: AuthorizationStatus.Unknown,
+  userInfo: null,
 };
 
 export const reducer = createReducer(initialState, (builder) => {
@@ -48,5 +54,25 @@ export const reducer = createReducer(initialState, (builder) => {
     .addCase(fetchFavoritesOffers.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.error.message || 'Не удалось загрузить избранные предложения';
+    })
+    .addCase(checkAuthAction.fulfilled, (state, action) => {
+      state.authorizationStatus = AuthorizationStatus.Auth;
+      state.userInfo = action.payload;
+    })
+    .addCase(checkAuthAction.rejected, (state) => {
+      state.authorizationStatus = AuthorizationStatus.NoAuth;
+      state.userInfo = null;
+    })
+    .addCase(loginAction.fulfilled, (state, action) => {
+      state.authorizationStatus = AuthorizationStatus.Auth;
+      state.userInfo = action.payload;
+    })
+    .addCase(loginAction.rejected, (state) => {
+      state.authorizationStatus = AuthorizationStatus.NoAuth;
+      state.userInfo = null;
+    })
+    .addCase(logoutAction.fulfilled, (state) => {
+      state.authorizationStatus = AuthorizationStatus.NoAuth;
+      state.userInfo = null;
     });
 });

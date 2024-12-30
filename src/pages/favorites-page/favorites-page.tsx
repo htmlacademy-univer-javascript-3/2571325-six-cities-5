@@ -1,7 +1,7 @@
 import React, { useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import FavoritesOffersList from '../../components/favorites-offers-list/favorites-offers-list';
-import { Header } from '../../components/header/header';
+import Header from '../../components/header/header';
 import { AppRoutes } from '../../constants/routers';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
@@ -10,41 +10,49 @@ import { fetchFavoritesOffers } from '../../store/action';
 interface FavoritesProps {}
 
 const FavoritesPage: React.FC<FavoritesProps> = () => {
-  const offers = useSelector((state: RootState) => state.favoritesOffers);
-  const cities = [...new Set(offers.map((offer) => offer.city.name))];
+  const favoritesOffers = useSelector((state: RootState) => state.favoritesOffers);
+  const cities = [...new Set(favoritesOffers.map((offer) => offer.city.name))];
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     dispatch(fetchFavoritesOffers());
-  }, [dispatch, offers]);
+  }, [dispatch]);
 
   return (
     <div className="page">
-      { Header }
+      <Header />
       <main className="page__main page__main--favorites">
         <div className="page__favorites-container container">
           <section className="favorites">
             <h1 className="favorites__title">Saved listing</h1>
-            <ul className="favorites__list">
-              {
-                cities.map((city) =>(
-                  <li className="favorites__locations-items" key={`${city}`}>
-                    <div className="favorites__locations locations locations--current">
-                      <div className="locations__item">
-                        <a className="locations__item-link" href="#">
-                          <span>{city}</span>
-                        </a>
-                      </div>
-                    </div>
-                    <div className="favorites__places">
-                      {
-                        <FavoritesOffersList offers={offers.filter((offer) => offer.city.name === city)} />
-                      }
-                    </div>
-                  </li>
-                ))
-              }
-            </ul>
+            {
+              favoritesOffers.length > 0 ?
+                (
+                  <ul className="favorites__list">
+                    {
+                      cities.map((city) =>(
+                        <li className="favorites__locations-items" key={`${city}`}>
+                          <div className="favorites__locations locations locations--current">
+                            <div className="locations__item">
+                              <a className="locations__item-link" href="#">
+                                <span>{city}</span>
+                              </a>
+                            </div>
+                          </div>
+                          <div className="favorites__places">
+                            {
+                              <FavoritesOffersList offers={favoritesOffers.filter((offer) => offer.city.name === city)} />
+                            }
+                          </div>
+                        </li>
+                      ))
+                    }
+                  </ul>
+                )
+                :
+                <span style={{ display: 'flex', justifyContent: 'center', fontSize: '18px', fontWeight: '500' }}>Nothing yet saved</span>
+            }
+
           </section>
         </div>
       </main>
