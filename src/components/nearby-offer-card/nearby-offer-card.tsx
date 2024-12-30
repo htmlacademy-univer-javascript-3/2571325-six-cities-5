@@ -1,9 +1,11 @@
 import React from 'react';
-import { Offer, OfferType } from '../../types/offer';
+import { OfferType } from '../../types/offer';
 import OfferCard from '../offer-card/offer-card';
+import { OfferNearby } from '../../types/offer-nearby';
+
 
 interface NearbyOfferCard {
-  offer: Offer;
+  offer: OfferNearby;
 }
 
 const NearbyOfferCard: React.FC<NearbyOfferCard> = ({offer}) => (
