@@ -2,9 +2,9 @@ import React from 'react';
 import { AppRoutes } from '../../constants/routers';
 import { Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
 import { AuthorizationStatus } from '../../constants/auth';
 import LoadingScreen from '../loading-screen/loading-screen';
+import { selectAuthStatus } from '../../store/selectors/selectors';
 
 interface PrivateRouterProps {
   children: JSX.Element;
@@ -12,7 +12,7 @@ interface PrivateRouterProps {
 
 const PrivateRouter: React.FC<PrivateRouterProps> = (props) => {
   const { children } = props;
-  const authorizationStatus = useSelector((state: RootState) => state.authorizationStatus);
+  const authorizationStatus = useSelector(selectAuthStatus);
   const authСondition = (authorizationStatus === AuthorizationStatus.Auth);
 
   if(authorizationStatus === AuthorizationStatus.Unknown) {

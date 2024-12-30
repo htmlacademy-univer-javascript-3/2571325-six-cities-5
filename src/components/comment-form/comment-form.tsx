@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent } from 'react';
 import { CommentFormValue } from './types/comment';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../store';
+import { AppDispatch } from '../../store/store';
 import { postComment } from '../../store/action';
 
 interface CommentFormProps {
