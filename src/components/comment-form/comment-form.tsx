@@ -1,13 +1,21 @@
 import React, { useState, ChangeEvent } from 'react';
 import { CommentFormValue } from './types/comment';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../store';
+import { postComment } from '../../store/action';
 
-interface CommentFormProps {}
+interface CommentFormProps {
+  offerId: string;
+  setIsUpdateReviws: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-const CommentForm: React.FC<CommentFormProps> = () => {
+const CommentForm: React.FC<CommentFormProps> = ({ offerId, setIsUpdateReviws }) => {
   const [formValue, setFormValue] = useState<CommentFormValue>({
-    value: '',
+    comment: '',
     rating: 0,
   });
+
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleRatingChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormValue((prev) => ({
@@ -17,11 +25,14 @@ const CommentForm: React.FC<CommentFormProps> = () => {
   };
 
   const handleTextChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    setFormValue({ ...formValue, value: event.target.value });
+    setFormValue({ ...formValue, comment: event.target.value });
   };
 
   const handleSubmitClick = (e : React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    dispatch(postComment({formValue, offerId}));
+    setFormValue({ comment: '', rating: 0 });
+    setIsUpdateReviws((prevState) => !prevState);
   };
 
   return(
@@ -51,7 +62,15 @@ const CommentForm: React.FC<CommentFormProps> = () => {
           </React.Fragment>
         ))}
       </div>
-      <textarea className="reviews__textarea form__textarea" id="review" name="review" placeholder="Tell how was your stay, what you like and what can be improved" value={formValue.value} onChange={handleTextChange}></textarea>
+      <textarea
+        className="reviews__textarea form__textarea"
+        id="review"
+        name="review"
+        placeholder="Tell how was your stay, what you like and what can be improved"
+        value={formValue.comment}
+        onChange={handleTextChange}
+      >
+      </textarea>
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
           To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">50 characters</b>.

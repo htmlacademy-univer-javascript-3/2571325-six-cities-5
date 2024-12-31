@@ -3,21 +3,22 @@ import leaflet from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useMap } from '../../hooks/use-map/use-map';
 import { Offer } from '../../types/offer';
+import { OfferNearby } from '../../types/offer-nearby';
 import { Point } from '../../types/point';
 import { defaultCustomIcon, currentCustomIcon } from '../../constants/map';
 
 interface MapProps {
   width: string;
   height: string;
-  offers: Offer[];
+  offers: Offer[] | OfferNearby[];
   activeCityTitle: string;
   onHoverOfferId?: string | null;
 }
 
 const Map: React.FC<MapProps> = (props) => {
-  const { width, height, offers, activeCityTitle, onHoverOfferId = null } = props;
+  const { width, height, offers = [], activeCityTitle, onHoverOfferId = null } = props;
   const getPoints = useCallback(
-    (offersList: Offer[], onHoverOfferIdItem: string | null) =>
+    (offersList: Offer[] | OfferNearby[], onHoverOfferIdItem: string | null) =>
       offersList
         .filter((offer) => offer.city.name === activeCityTitle)
         .map((offer) => ({

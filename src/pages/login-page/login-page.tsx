@@ -62,7 +62,7 @@ const LoginPage: React.FC = () => {
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
-              <div className="login__input-wrapper form__input-wrapper">
+              <div className="__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">Password</label>
                 <input
                   className="login__input form__input"

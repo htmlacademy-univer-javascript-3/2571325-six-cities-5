@@ -30,7 +30,8 @@ const Router: React.FC = () => {
           </PrivateRouter>
         )}
         />
-        <Route path={AppRoutes.OfferId} element={<OfferPage reviews={[]} />} />
+        <Route path={AppRoutes.OfferId} element={<OfferPage />} />
+        <Route path={AppRoutes.NotFound} element={<NotFound />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
     </BrowserRouter>
