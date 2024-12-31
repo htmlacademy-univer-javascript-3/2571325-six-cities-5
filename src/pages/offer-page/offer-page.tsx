@@ -78,7 +78,7 @@ const OfferPage: React.FC = () => {
     }
   }, [offersNearby, currOffer]);
 
-  const handleChangeStatus = (evt: React.MouseEvent<HTMLButtonElement>) => {
+  const handleChangeStatus = (evt: React.MouseEvent<SVGSVGElement>) => {
     evt.preventDefault();
     if(authorizationStatus === AuthorizationStatus.NoAuth || authorizationStatus === AuthorizationStatus.Unknown) {
       navigate(AppRoutes.Login);
