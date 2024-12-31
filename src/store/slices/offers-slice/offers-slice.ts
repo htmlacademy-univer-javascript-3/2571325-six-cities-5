@@ -4,6 +4,7 @@ import { Cities } from '../../../constants/cities';
 import { Offer } from '../../../types/offer';
 import { OfferInfo } from '../../../types/offer-info';
 import { OfferNearby } from '../../../types/offer-nearby';
+import { changeOfferStatus } from '../../action';
 
 interface OffersState {
   offers: Offer[];
@@ -13,6 +14,7 @@ interface OffersState {
   offersNearby?: OfferNearby[];
   isLoading: boolean | undefined;
   error: string | null;
+  isUpdate: boolean;
 }
 
 const initialState: OffersState = {
@@ -22,7 +24,8 @@ const initialState: OffersState = {
   offerInfo: undefined,
   offersNearby: undefined,
   isLoading: false,
-  error: null
+  error: null,
+  isUpdate: false,
 };
 
 const offersSlice = createSlice({
@@ -70,6 +73,9 @@ const offersSlice = createSlice({
       })
       .addCase(fetchOffersNearby.fulfilled, (state, action: PayloadAction<OfferNearby[]>) => {
         state.offersNearby = action.payload;
+      })
+      .addCase(changeOfferStatus.fulfilled, (state) => {
+        state.isUpdate = !state.isUpdate;
       });
   }
 });

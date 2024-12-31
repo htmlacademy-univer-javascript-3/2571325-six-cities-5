@@ -1,23 +1,32 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AppRoutes } from '../../constants/routers';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store/store';
-import { logoutAction } from '../../store/action';
+import { fetchFavoritesOffers, logoutAction } from '../../store/action';
 import { AuthorizationStatus } from '../../constants/auth';
-import { selectAuthStatus, selectFavoritesOffers, selectUserInfo } from '../../store/selectors/selectors';
+import { selectAuthStatus, selectFavoritesOffers, selectIsUpdateOffers, selectUserInfo } from '../../store/selectors/selectors';
 
 const Header: React.FC = () => {
   const authorizationStatus = useSelector(selectAuthStatus);
   const userInfo = useSelector(selectUserInfo);
   const favoritesOffers = useSelector(selectFavoritesOffers);
   const dispatch = useDispatch<AppDispatch>();
+  const isUpdateData = useSelector(selectIsUpdateOffers);
 
   const fetchLogout = async () => await dispatch(logoutAction()).unwrap();
 
   const handleLogout = () => {
-    fetchLogout();
+    void (async () => {
+      await fetchLogout();
+    })();
   };
+
+  useEffect(() => {
+    if(authorizationStatus === AuthorizationStatus.Auth) {
+      dispatch(fetchFavoritesOffers());
+    }
+  }, [dispatch, authorizationStatus, isUpdateData]);
 
   const authNav = (
     <nav className="header__nav">
