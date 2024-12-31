@@ -9,7 +9,7 @@ import FavoritesPage from '../../../pages/favorites-page/favorites-page';
 import OfferPage from '../../../pages/offer-page/offer-page';
 import NotFound from '../../../pages/not-found-page/not-found-page';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../../store';
+import { AppDispatch } from '../../../store/store';
 import { checkAuthAction } from '../../../store/action';
 
 const Router: React.FC = () => {

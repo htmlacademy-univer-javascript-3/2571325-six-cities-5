@@ -1,10 +1,9 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useEffect, useMemo } from 'react';
 import leaflet from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useMap } from '../../hooks/use-map/use-map';
 import { Offer } from '../../types/offer';
 import { OfferNearby } from '../../types/offer-nearby';
-import { Point } from '../../types/point';
 import { defaultCustomIcon, currentCustomIcon } from '../../constants/map';
 
 interface MapProps {
@@ -17,24 +16,22 @@ interface MapProps {
 
 const Map: React.FC<MapProps> = (props) => {
   const { width, height, offers = [], activeCityTitle, onHoverOfferId = null } = props;
-  const getPoints = useCallback(
-    (offersList: Offer[] | OfferNearby[], onHoverOfferIdItem: string | null) =>
-      offersList
-        .filter((offer) => offer.city.name === activeCityTitle)
-        .map((offer) => ({
-          ...offer.location,
-          isDefault: offer.id !== onHoverOfferIdItem?.toString(),
-        })),
-    [activeCityTitle]
+  const currCity = useMemo(() =>
+    offers.find((offer) => offer.city.name === activeCityTitle)?.city || null,
+  [offers, activeCityTitle]
   );
-  const currCity = offers.find((offer) => offer.city.name === activeCityTitle)?.city || null;
-  const [points, setPoints] = useState<Point[]>(getPoints(offers, onHoverOfferId));
+
+  const points = useMemo(() =>
+    offers
+      .filter((offer) => offer.city.name === activeCityTitle)
+      .map((offer) => ({
+        ...offer.location,
+        isDefault: offer.id !== onHoverOfferId?.toString(),
+      })),
+  [offers, activeCityTitle, onHoverOfferId]
+  );
   const mapRef = useRef<HTMLDivElement>(null);
   const map = useMap({ mapRef, city: currCity });
-
-  useEffect(() => {
-    setPoints(getPoints(offers, onHoverOfferId));
-  }, [onHoverOfferId, activeCityTitle, offers, getPoints]);
 
   useEffect(() => {
     if (map) {
@@ -59,4 +56,5 @@ const Map: React.FC<MapProps> = (props) => {
   );
 };
 
-export default Map;
+const MemoizedMap = React.memo(Map);
+export default MemoizedMap;

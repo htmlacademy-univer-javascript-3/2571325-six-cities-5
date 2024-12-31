@@ -4,7 +4,7 @@ import { Offer, OfferType } from '../../types/offer';
 
 interface OffersListProps {
   offers: Offer[];
-  setOnHoverOfferId: React.Dispatch<React.SetStateAction<string | null>>;
+  setOnHoverOfferId: (id: string | null) => void;
 }
 
 const OffersList: React.FC<OffersListProps> = ({ offers, setOnHoverOfferId }) => (

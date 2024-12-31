@@ -2,14 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { AppRoutes } from '../../constants/routers';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../store';
+import { AppDispatch } from '../../store/store';
 import { logoutAction } from '../../store/action';
 import { AuthorizationStatus } from '../../constants/auth';
+import { selectAuthStatus, selectFavoritesOffers, selectUserInfo } from '../../store/selectors/selectors';
 
 const Header: React.FC = () => {
-  const authorizationStatus = useSelector((state: RootState) => state.authorizationStatus);
-  const userInfo = useSelector((state: RootState) => state.userInfo);
-  const favoritesOffers = useSelector((state: RootState) => state.favoritesOffers);
+  const authorizationStatus = useSelector(selectAuthStatus);
+  const userInfo = useSelector(selectUserInfo);
+  const favoritesOffers = useSelector(selectFavoritesOffers);
   const dispatch = useDispatch<AppDispatch>();
 
   const fetchLogout = async () => await dispatch(logoutAction()).unwrap();

@@ -1,25 +1,36 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppRoutes } from '../../constants/routers';
 import { loginAction } from '../../store/action';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../store';
+import { AppDispatch } from '../../store/store';
 
 const LoginPage: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  const fetchLogin = async () => {
-    await dispatch(loginAction({ email, password })).unwrap();
-    navigate(AppRoutes.Default);
-  };
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  }, []);
 
-  const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
-    evt.preventDefault();
-    fetchLogin();
-  };
+  const handleSubmit = useCallback(
+    (evt: FormEvent) => {
+      evt.preventDefault();
+      void (async () => {
+        await dispatch(loginAction(formData)).unwrap();
+        navigate(AppRoutes.Default);
+      })();
+    },
+    [dispatch, formData, navigate]
+  );
 
   return (
     <div className="page page--gray page--login">
@@ -58,8 +69,8 @@ const LoginPage: React.FC = () => {
                   name="email"
                   placeholder="Email"
                   required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={formData.email}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="__input-wrapper form__input-wrapper">
@@ -70,8 +81,8 @@ const LoginPage: React.FC = () => {
                   name="password"
                   placeholder="Password"
                   required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={formData.password}
+                  onChange={handleInputChange}
                 />
               </div>
               <button

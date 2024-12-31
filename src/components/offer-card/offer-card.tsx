@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Offer, OfferType } from '../../types/offer';
 import { OfferNearby } from '../../types/offer-nearby';
 import { Link } from 'react-router-dom';
@@ -7,7 +7,7 @@ import { AppRoutes } from '../../constants/routers';
 interface OfferCardProps {
   offer: Offer | OfferNearby;
   cardType?: string;
-  setOnHoverOfferId?: React.Dispatch<React.SetStateAction<string | null>>;
+  setOnHoverOfferId?: (id: string | null) => void;
 }
 
 enum ClassName {
@@ -29,20 +29,17 @@ const OfferCard: React.FC<OfferCardProps> = (props) => {
     }
   };
   const cardClassName = getClassName(cardType);
-  const handleIsHoverOffer = () =>{
-    if(setOnHoverOfferId) {
-      setOnHoverOfferId(offer.id);
-    }
-  };
 
-  const handleOutHoverOffer = () =>{
-    if(setOnHoverOfferId) {
-      setOnHoverOfferId(null);
-    }
-  };
+  const handleMouseOver = useCallback(() => {
+    setOnHoverOfferId?.(offer.id);
+  }, [offer.id, setOnHoverOfferId]);
+
+  const handleMouseOut = useCallback(() => {
+    setOnHoverOfferId?.(null);
+  }, [setOnHoverOfferId]);
 
   return (
-    <article className={`${cardClassName}__card place-card`} onMouseOver={handleIsHoverOffer} onMouseOut={handleOutHoverOffer}>
+    <article className={`${cardClassName}__card place-card`} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
       {offer.isPremium && (
         <div className="place-card__mark">
           <span>Premium</span>

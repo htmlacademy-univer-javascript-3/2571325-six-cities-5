@@ -4,13 +4,14 @@ import FavoritesOffersList from '../../components/favorites-offers-list/favorite
 import Header from '../../components/header/header';
 import { AppRoutes } from '../../constants/routers';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../store';
+import { AppDispatch } from '../../store/store';
 import { fetchFavoritesOffers } from '../../store/action';
+import { selectFavoritesOffers } from '../../store/selectors/selectors';
 
 interface FavoritesProps {}
 
 const FavoritesPage: React.FC<FavoritesProps> = () => {
-  const favoritesOffers = useSelector((state: RootState) => state.favoritesOffers);
+  const favoritesOffers = useSelector(selectFavoritesOffers);
   const cities = [...new Set(favoritesOffers.map((offer) => offer.city.name))];
   const dispatch = useDispatch<AppDispatch>();
 

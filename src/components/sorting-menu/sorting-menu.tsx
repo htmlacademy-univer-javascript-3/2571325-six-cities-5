@@ -1,19 +1,24 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { SortingType } from '../../types/sort';
 
 interface SortingMenuProps {
-  isOpenSortingMenu: boolean;
-  setIsOpenSortingMenu: React.Dispatch<React.SetStateAction<boolean>>;
+  isOpen: boolean;
+  onToggle: React.Dispatch<React.SetStateAction<boolean>>;
   sortingType: SortingType;
-  setSortingType: React.Dispatch<React.SetStateAction<SortingType>>;
+  onTypeChange: (type: SortingType) => void;
 }
 
 const SortingMenu: React.FC<SortingMenuProps> = (props) => {
-  const { isOpenSortingMenu, setIsOpenSortingMenu, sortingType, setSortingType } = props;
-  const sortingOptions: SortingType[] = [SortingType.Popular, SortingType.LowToHight, SortingType.HightToLow, SortingType.TopRating];
+  const { isOpen, onToggle, sortingType, onTypeChange } = props;
+  const sortingOptions = useMemo(() => [
+    SortingType.Popular,
+    SortingType.LowToHight,
+    SortingType.HightToLow,
+    SortingType.TopRating
+  ], []);
 
   const handleChangeMenuState = () => {
-    setIsOpenSortingMenu((prevState) => !prevState);
+    onToggle((prevState) => !prevState);
   };
 
   return (
@@ -26,14 +31,14 @@ const SortingMenu: React.FC<SortingMenuProps> = (props) => {
         </svg>
       </span>
       {
-        isOpenSortingMenu && (
+        isOpen && (
           <ul className="places__options places__options--custom places__options--opened">
             {sortingOptions.map((option) => (
               <li
                 key={option}
                 className={`places__option ${sortingType === option ? 'places__option--active' : ''}`}
                 tabIndex={0}
-                onClick={() => setSortingType(option)}
+                onClick={() => onTypeChange(option)}
               >
                 {option}
               </li>
@@ -45,4 +50,5 @@ const SortingMenu: React.FC<SortingMenuProps> = (props) => {
   );
 };
 
-export default SortingMenu;
+const MemoizedMenu = React.memo(SortingMenu);
+export default MemoizedMenu;

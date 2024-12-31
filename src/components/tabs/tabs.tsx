@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Tab from '../tab/tab';
 import { Cities } from '../../constants/cities';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch } from '../../store';
+import { AppDispatch } from '../../store/store';
 import { changeCity } from '../../store/action';
-import { RootState } from '../../store';
+import { selectActiveCity } from '../../store/selectors/selectors';
 
 interface TabsProps {
   cities: Cities[];
@@ -13,11 +13,11 @@ interface TabsProps {
 const Tabs: React.FC<TabsProps> = ({ cities }) => {
   const citiesValues = Object.values(cities);
   const dispatch = useDispatch<AppDispatch>();
-  const activeCity = useSelector((state: RootState) => state.city);
+  const activeCity = useSelector(selectActiveCity);
 
-  const handleChangeActiveCity = (city: Cities) => {
+  const handleChangeActiveCity = useCallback((city: Cities) => {
     dispatch(changeCity(city));
-  };
+  }, [dispatch]);
 
   return (
     <div className="tabs">
