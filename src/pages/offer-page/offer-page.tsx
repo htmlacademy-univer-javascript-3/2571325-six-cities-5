@@ -7,13 +7,13 @@ import Map from '../../components/map/map';
 import NearbyOffersList from '../../components/nearby-offers-list/nearby-offers-list';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store/store';
-import { fetchComments, fetchOffer, fetchOffersNearby } from '../../store/action';
+import { changeOfferStatus, fetchComments, fetchOffer, fetchOffersNearby } from '../../store/action';
 import { OfferNearby } from '../../types/offer-nearby';
 import { OfferInfo } from '../../types/offer-info';
 import { AppRoutes } from '../../constants/routers';
 import LoadingScreen from '../../components/loading-screen/loading-screen';
 import { AuthorizationStatus } from '../../constants/auth';
-import { selectActiveCity, selectAuthStatus, selectComments, selectOfferInfo, selectOfferIsLoading, selectOffersNearby } from '../../store/selectors/selectors';
+import { selectActiveCity, selectAuthStatus, selectComments, selectIsUpdateOffers, selectOfferInfo, selectOfferIsLoading, selectOffersNearby } from '../../store/selectors/selectors';
 
 const OfferPage: React.FC = () => {
   const location = useLocation();
@@ -27,6 +27,7 @@ const OfferPage: React.FC = () => {
   const currOfferId = location.pathname.split(':')[1];
   const [offersMap, setOffersMap] = useState<OfferNearby[]>([]);
   const [isUpdateReviews, setIsUpdateReviws] = useState<boolean>(false);
+  const isUpdateData = useSelector(selectIsUpdateOffers);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,7 +35,7 @@ const OfferPage: React.FC = () => {
       dispatch(fetchOffer(currOfferId));
       dispatch(fetchOffersNearby(currOfferId));
     }
-  }, [dispatch, currOfferId]);
+  }, [dispatch, currOfferId, isUpdateData]);
 
   useEffect(() => {
     if(currOfferId){
@@ -77,6 +78,20 @@ const OfferPage: React.FC = () => {
     }
   }, [offersNearby, currOffer]);
 
+  const handleChangeStatus = (evt: React.MouseEvent<SVGSVGElement>) => {
+    evt.preventDefault();
+    if(authorizationStatus === AuthorizationStatus.NoAuth || authorizationStatus === AuthorizationStatus.Unknown) {
+      navigate(AppRoutes.Login);
+      return;
+    }
+    void (async () => {
+      await dispatch(changeOfferStatus({
+        offerStatus: currOffer?.isFavorite ? 0 : 1,
+        offerId: currOffer?.id ?? ''
+      }));
+    })();
+  };
+
   return (
     <div className="page">
       <Header />
@@ -105,7 +120,7 @@ const OfferPage: React.FC = () => {
                       {currOffer?.title ?? 'No Name'}
                     </h1>
                     <button className="offer__bookmark-button button" type="button">
-                      <svg className="offer__bookmark-icon" style={ currOffer?.isFavorite ? { fill: '#4481c3', stroke: '#4481c3'} : { fill: 'none'}} width="31" height="33">
+                      <svg className="offer__bookmark-icon" style={ currOffer?.isFavorite ? { fill: '#4481c3', stroke: '#4481c3'} : { fill: 'none'}} width="31" height="33" onClick={handleChangeStatus}>
                         <use xlinkHref="#icon-bookmark"></use>
                       </svg>
                       <span className="visually-hidden">To bookmarks</span>
