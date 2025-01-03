@@ -2,7 +2,7 @@ import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { Cities } from '../../../constants/cities';
 import { Offer } from '../../../types/offer';
 import { AxiosInstance } from 'axios';
-import { Actions } from '../../../constants/action';
+import { Actions } from '../../../constants/actions';
 import { Paths } from '../../../constants/paths';
 import { OfferInfo } from '../../../types/offer-info';
 import { OfferNearby } from '../../../types/offer-nearby';
@@ -54,5 +54,19 @@ export const fetchOffersNearby = createAsyncThunk<
     async (id, { extra: api }) => {
       const { data } = await api.get<OfferNearby[]>(Paths.FetchOfferNearby.replace('{offerId}', id));
       return data;
+    }
+  );
+
+export const changeOfferStatus = createAsyncThunk<
+    void,
+    {
+      offerStatus: number;
+      offerId: string;
+    },
+    { extra: AxiosInstance }
+  >(
+    Actions.CHANGE_OFFER_STATUS,
+    async ({ offerStatus, offerId }, { extra: api }) => {
+      await api.post(`${Paths.FetchFavoritesOffers}/${offerId}/${offerStatus}`);
     }
   );

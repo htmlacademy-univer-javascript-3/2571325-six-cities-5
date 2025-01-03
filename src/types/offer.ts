@@ -6,7 +6,7 @@ export type Offer = {
   price: number;
   isPremium: boolean;
   isFavorite: boolean;
-  rating: 1 | 2 | 3 | 4 | 5 ;
+  rating: number;
   location: {
     latitude: number;
     longitude: number;

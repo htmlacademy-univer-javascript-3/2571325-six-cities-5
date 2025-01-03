@@ -7,11 +7,11 @@ import Tabs from '../../components/tabs/tabs';
 import { Cities } from '../../constants/cities';
 import SortingMenu from '../../components/sorting-menu/sorting-menu';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchOffers } from '../../store/action';
 import { AppDispatch } from '../../store/store';
 import Spinner from '../../components/spinner/spinner';
 import { selectActiveCity, selectIsUpdateOffers, selectOffers, selectOffersLoading } from '../../store/selectors/selectors';
 import OffersPlug from '../../components/offers-plug/offers-plug';
+import { fetchOffers } from '../../store/actions/offers-actions/offers-actions';
 
 interface MainProps {
   cities: Cities[];
