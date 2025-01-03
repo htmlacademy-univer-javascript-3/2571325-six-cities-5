@@ -7,7 +7,7 @@ interface TabProps {
 }
 
 const Tab: React.FC<TabProps> = ({ cityTitle, isActiveCity, handleChangeActiveCity }) => (
-  <li className="locations__item" onClick={handleChangeActiveCity}>
+  <li className="locations__item" data-testid="tab" onClick={handleChangeActiveCity}>
     <a
       className={`locations__item-link tabs__item ${isActiveCity ? 'tabs__item--active' : ''}`}
       href="#"

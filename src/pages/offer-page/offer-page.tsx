@@ -2,18 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Header from '../../components/header/header';
 import CommentForm from '../../components/comment-form/comment-form';
-import ReviewList from '../../components/reviews-list/reviews-list';
+import ReviewsList from '../../components/reviews-list/reviews-list';
 import Map from '../../components/map/map';
 import NearbyOffersList from '../../components/nearby-offers-list/nearby-offers-list';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store/store';
-import { changeOfferStatus, fetchComments, fetchOffer, fetchOffersNearby } from '../../store/action';
+import { changeOfferStatus, fetchOffer, fetchOffersNearby } from '../../store/actions/offers-actions/offers-actions';
 import { OfferNearby } from '../../types/offer-nearby';
 import { OfferInfo } from '../../types/offer-info';
 import { AppRoutes } from '../../constants/routers';
 import LoadingScreen from '../../components/loading-screen/loading-screen';
 import { AuthorizationStatus } from '../../constants/auth';
 import { selectActiveCity, selectAuthStatus, selectComments, selectIsUpdateOffers, selectOfferInfo, selectOfferIsLoading, selectOffersNearby } from '../../store/selectors/selectors';
+import { fetchComments } from '../../store/actions/comments-actions/comments-actions';
 
 const OfferPage: React.FC = () => {
   const location = useLocation();
@@ -192,7 +193,7 @@ const OfferPage: React.FC = () => {
                     </div>
                   </div>
                   <section className="offer__reviews reviews">
-                    <ReviewList reviews={comments ?? []} />
+                    <ReviewsList reviews={comments ?? []} />
                     {
                       authorizationStatus === AuthorizationStatus.Auth && <CommentForm offerId={currOfferId} setIsUpdateReviws={setIsUpdateReviws} />
                     }

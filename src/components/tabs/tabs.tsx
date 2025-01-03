@@ -3,8 +3,8 @@ import Tab from '../tab/tab';
 import { Cities } from '../../constants/cities';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store/store';
-import { changeCity } from '../../store/action';
 import { selectActiveCity } from '../../store/selectors/selectors';
+import { changeCity } from '../../store/actions/offers-actions/offers-actions';
 
 interface TabsProps {
   cities: Cities[];

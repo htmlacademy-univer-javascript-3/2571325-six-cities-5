@@ -28,8 +28,8 @@ const Map: React.FC<MapProps> = (props) => {
         ...offer.location,
         isDefault: offer.id !== onHoverOfferId?.toString(),
       })),
-  [offers, activeCityTitle, onHoverOfferId]
-  );
+  [offers, activeCityTitle, onHoverOfferId]);
+
   const mapRef = useRef<HTMLDivElement>(null);
   const map = useMap({ mapRef, city: currCity });
 
@@ -52,6 +52,7 @@ const Map: React.FC<MapProps> = (props) => {
     <div
       style={{ height: height, width: width }}
       ref={mapRef}
+      data-testid="map"
     />
   );
 };

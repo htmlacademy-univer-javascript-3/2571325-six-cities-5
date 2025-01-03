@@ -2,7 +2,7 @@ import React, { useState, ChangeEvent } from 'react';
 import { CommentFormValue } from './types/comment';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../store/store';
-import { postComment } from '../../store/action';
+import { postComment } from '../../store/actions/comments-actions/comments-actions';
 
 interface CommentFormProps {
   offerId: string;
@@ -54,6 +54,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ offerId, setIsUpdateReviws })
               htmlFor={`${star}-stars`}
               className="reviews__rating-label form__rating-label"
               title={{ 5: 'perfect', 4: 'good', 3: 'not bad', 2: 'badly', 1: 'terribly' }[star]}
+              data-testid={{ 5: 'perfect', 4: 'good', 3: 'not bad', 2: 'badly', 1: 'terribly' }[star]}
             >
               <svg className="form__star-image" width="37" height="33">
                 <use xlinkHref="#icon-star"></use>

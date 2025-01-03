@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Review } from '../../../types/review';
-import { fetchComments } from '../../action';
+import { fetchComments } from '../../actions/comments-actions/comments-actions';
 
 interface CommentsState {
   comments: Review[];
