@@ -8,7 +8,7 @@ interface OffersListProps {
 }
 
 const OffersList: React.FC<OffersListProps> = ({ offers, setOnHoverOfferId }) => (
-  <div className='cities__places-list places__list tabs__content'>
+  <div className='cities__places-list places__list tabs__content' data-testid='offer-list'>
     {offers.map((offer) => (
       <OfferCard key={`${offer.id}`} offer={offer} cardType={OfferType.Defaulte} setOnHoverOfferId={setOnHoverOfferId} />
     ))}

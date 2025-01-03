@@ -2,13 +2,13 @@ import React from 'react';
 import { Review } from '../../types/review';
 import ReviewItem from '../review-item/review-item';
 
-interface ReviewListProps {
+interface ReviewsListProps {
   reviews: Review[];
 }
 
-const ReviewList: React.FC<ReviewListProps> = ({reviews}) => (
+const ReviewsList: React.FC<ReviewsListProps> = ({reviews}) => (
   <>
-    <h2 className="reviews__title">
+    <h2 className="reviews__title" data-testid='reviews-list'>
       Reviews &middot; <span className="reviews__amount">{reviews.length || 0}</span>
     </h2>
     <ul className="reviews__list">
@@ -21,4 +21,4 @@ const ReviewList: React.FC<ReviewListProps> = ({reviews}) => (
   </>
 );
 
-export default ReviewList;
+export default ReviewsList;

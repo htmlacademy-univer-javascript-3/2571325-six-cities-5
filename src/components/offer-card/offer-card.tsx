@@ -3,7 +3,7 @@ import { Offer, OfferType } from '../../types/offer';
 import { OfferNearby } from '../../types/offer-nearby';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppRoutes } from '../../constants/routers';
-import { changeOfferStatus } from '../../store/action';
+import { changeOfferStatus } from '../../store/actions/offers-actions/offers-actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store/store';
 import { selectAuthStatus } from '../../store/selectors/selectors';
@@ -61,7 +61,7 @@ const OfferCard: React.FC<OfferCardProps> = (props) => {
   }, [setOnHoverOfferId]);
 
   return (
-    <article className={`${cardClassName}__card place-card`} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
+    <article className={`${cardClassName}__card place-card`} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut} data-testid="offer-card">
       {offer.isPremium && (
         <div className="place-card__mark">
           <span>Premium</span>

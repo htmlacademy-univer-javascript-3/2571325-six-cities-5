@@ -5,8 +5,8 @@ import Header from '../../components/header/header';
 import { AppRoutes } from '../../constants/routers';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store/store';
-import { fetchFavoritesOffers } from '../../store/action';
 import { selectFavoritesOffers } from '../../store/selectors/selectors';
+import { fetchFavoritesOffers } from '../../store/actions/offers-actions/offers-actions';
 
 interface FavoritesProps {}
 

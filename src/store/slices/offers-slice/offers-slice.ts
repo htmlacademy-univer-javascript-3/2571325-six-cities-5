@@ -1,10 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { fetchOffers, fetchFavoritesOffers, fetchOffer, fetchOffersNearby, changeCity } from '../../actions/offers-actions/offers-actions';
+import { fetchOffers, fetchFavoritesOffers, fetchOffer, fetchOffersNearby, changeCity, changeOfferStatus } from '../../actions/offers-actions/offers-actions';
 import { Cities } from '../../../constants/cities';
 import { Offer } from '../../../types/offer';
 import { OfferInfo } from '../../../types/offer-info';
 import { OfferNearby } from '../../../types/offer-nearby';
-import { changeOfferStatus } from '../../action';
 
 interface OffersState {
   offers: Offer[];

@@ -21,7 +21,7 @@ const Spinner: React.FC<SpinnerProps> = ({height}) => {
   };
 
   return (
-    <div className="spinner" style={styleSpinner}>
+    <div className="spinner" data-testid="spinner" style={styleSpinner}>
       <div className="loader" style={styleLoader}></div>
     </div>
   );
