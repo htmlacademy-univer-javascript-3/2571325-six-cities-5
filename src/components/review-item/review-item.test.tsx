@@ -8,7 +8,6 @@ describe('ReviewItem', () => {
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.getByText('Great place')).toBeInTheDocument();
     expect(screen.getByText('December 2024')).toBeInTheDocument();
-    expect(screen.getByText('December 2024')).toBeInTheDocument();
     expect(screen.getByAltText('Reviews avatar')).toHaveAttribute('src', 'test-avatar.jpg');
     expect(screen.getByTestId('review-item')).toBeInTheDocument();
   });

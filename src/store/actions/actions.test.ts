@@ -15,6 +15,8 @@ import { mockUserInfo } from '../../mocks/user';
 import { checkAuthAction, loginAction, logoutAction } from './auth-actions/auth-actions';
 import { changeOfferStatus, fetchFavoritesOffers, fetchOffer, fetchOffers } from './offers-actions/offers-actions';
 import { fetchComments, postComment } from './comments-actions/comments-actions';
+import { getToken, dropToken, saveToken } from '../../services/services';
+import { AxiosRequestHeaders } from 'axios';
 
 export const extractActionsTypes = (actions: Action<string>[]) => actions.map(({ type }) => type);
 
@@ -28,6 +30,7 @@ describe('Asycn actoins', () => {
   beforeEach(() => {
     store = mockStore({});
     mockAPI.reset();
+    dropToken();
   });
 
   describe('fetchOffers', () => {
@@ -234,8 +237,13 @@ describe('Asycn actoins', () => {
       password: 'password1',
     };
 
+    const mockAuthResponse = {
+      ...mockUserInfo,
+      token: 'test-token'
+    };
+
     it('should dispatch "loginAction.pending" and "loginAction.fulfilled" on success', async () => {
-      mockAPI.onPost(Paths.FetchLogin).reply(200, mockUserInfo);
+      mockAPI.onPost(Paths.FetchLogin).reply(200, mockAuthResponse);
 
       await store.dispatch(loginAction(mockCredentials));
       const actions = extractActionsTypes(store.getActions());
@@ -246,7 +254,17 @@ describe('Asycn actoins', () => {
       ]);
 
       const fetchData = store.getActions().at(1) as ReturnType<typeof loginAction.fulfilled>;
-      expect(fetchData?.payload).toEqual(mockUserInfo);
+      expect(fetchData?.payload).toEqual(mockAuthResponse);
+      expect(getToken()).toBe('test-token');
+      let requestHeaders: AxiosRequestHeaders | undefined;
+      mockAPI.onGet(Paths.FetchFavoritesOffers).reply((config) => {
+        requestHeaders = config.headers as AxiosRequestHeaders;
+        return [200, []];
+      });
+
+      await store.dispatch(fetchFavoritesOffers());
+      // eslint-disable-line
+      expect(requestHeaders?.['X-Token']).toBe('test-token');
     });
 
     it('should dispatch "loginAction.pending" and "loginAction.rejected" on failure', async () => {
@@ -261,11 +279,13 @@ describe('Asycn actoins', () => {
       ]);
       const fetchData = store.getActions().at(1) as ReturnType<typeof loginAction.rejected>;
       expect(fetchData?.payload).toEqual(undefined);
+      expect(getToken()).toBe('');
     });
   });
 
   describe('logoutAction', () => {
     it('should dispatch "logoutAction.pending" and "logoutAction.fulfilled" on success', async () => {
+      saveToken('existing-token');
       mockAPI.onDelete(Paths.FetchLogout).reply(200);
 
       await store.dispatch(logoutAction());
@@ -275,9 +295,11 @@ describe('Asycn actoins', () => {
         `${Actions.LOGOUT}/pending`,
         `${Actions.LOGOUT}/fulfilled`
       ]);
+      expect(getToken()).toBe('');
     });
 
     it('should dispatch "logoutAction.pending" and "logoutAction.rejected" on failure', async () => {
+      saveToken('existing-token');
       mockAPI.onDelete(Paths.FetchLogout).reply(500);
 
       await store.dispatch(logoutAction());
@@ -287,11 +309,13 @@ describe('Asycn actoins', () => {
         `${Actions.LOGOUT}/pending`,
         `${Actions.LOGOUT}/rejected`
       ]);
+      expect(getToken()).toBe('existing-token');
     });
   });
 
   describe('checkAuthAction', () => {
     it('should dispatch "checkAuthAction.pending" and "checkAuthAction.fulfilled" on success', async () => {
+      saveToken('existing-token');
       mockAPI.onGet(Paths.FetchLogin).reply(200, mockUserInfo);
 
       await store.dispatch(checkAuthAction());
@@ -301,10 +325,11 @@ describe('Asycn actoins', () => {
         `${Actions.CHECK_AUTH}/pending`,
         `${Actions.CHECK_AUTH}/fulfilled`
       ]);
-
+      expect(getToken()).toBe('existing-token');
     });
 
     it('should dispatch "checkAuthAction.pending" and "checkAuthAction.rejected" on failure', async () => {
+      saveToken('expired-token');
       mockAPI.onGet(Paths.FetchLogin).reply(401);
 
       await store.dispatch(checkAuthAction());
@@ -314,6 +339,7 @@ describe('Asycn actoins', () => {
         `${Actions.CHECK_AUTH}/pending`,
         `${Actions.CHECK_AUTH}/rejected`
       ]);
+      expect(getToken()).toBe('');
     });
   });
 });

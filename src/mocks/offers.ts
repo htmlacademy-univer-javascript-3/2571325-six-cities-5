@@ -24,7 +24,7 @@ export const offersMock: Offer[] = [
       'zoom': 16
     },
     isFavorite: true,
-    isPremium: false,
+    isPremium: true,
     rating: 2.8
   },
   {
