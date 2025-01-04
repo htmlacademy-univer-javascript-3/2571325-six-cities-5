@@ -9,7 +9,6 @@ vi.mock('../nearby-offer-card/nearby-offer-card', () => ({
 }));
 
 describe('NearbyOffersList', () => {
-
   it('renders the title for the list of nearby offers', () => {
     render(<NearbyOffersList offers={offersMock} />);
 
