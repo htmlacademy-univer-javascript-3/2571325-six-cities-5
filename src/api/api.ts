@@ -2,6 +2,7 @@ import axios, { AxiosInstance, AxiosError } from 'axios';
 import { BASE_URL, REQUEST_TIMEOUT } from '../constants/api';
 import { getToken, dropToken } from '../services/services';
 import { StatusCodes } from 'http-status-codes';
+import { handleServerError } from './error-handling';
 
 export const createAPI = (): AxiosInstance => {
   const api = axios.create({
@@ -26,7 +27,7 @@ export const createAPI = (): AxiosInstance => {
       if (response?.status === StatusCodes.UNAUTHORIZED) {
         dropToken();
       }
-      return Promise.reject(error);
+      return handleServerError(error);
     }
   );
   return api;

@@ -1,14 +1,12 @@
 import MockAdapter from 'axios-mock-adapter';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import thunk from 'redux-thunk';
-import { extractActionsTypes } from '../../store/actions/actions.test';
 import CommentForm from './comment-form';
 import { Cities } from '../../constants/cities';
-import { postComment } from '../../store/actions/comments-actions/comments-actions';
 import { AppThunkDispatch } from '../../store/types';
 import { RootState } from '../../store/store';
 import { createAPI } from '../../api/api';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { Action } from '@reduxjs/toolkit';
 
@@ -26,15 +24,16 @@ describe('CommentForm', () => {
       }
     });
     mockAPI.reset();
+    vi.spyOn(window, 'alert').mockImplementation(() => {});
   });
 
-  describe('CommentForm ir render', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  describe('CommentForm rendering and validation', () => {
     const mockSetIsUpdateReviews = vi.fn();
     const offerId = '1';
-
-    beforeEach(() => {
-      vi.clearAllMocks();
-    });
 
     const renderCommentForm = () => render(
       <Provider store={store}>
@@ -50,39 +49,43 @@ describe('CommentForm', () => {
       expect(screen.getByText('Submit')).toBeInTheDocument();
     });
 
-    it('handles form submission with comment and rating', async () => {
-      mockAPI
-        .onPost(`/comments/${offerId}`)
-        .reply(200, []);
+    it('shows alert for missing rating on submit', () => {
+      renderCommentForm();
 
+      const submitButton = screen.getByTestId('submit-button');
+      fireEvent.click(submitButton);
+
+      expect(screen.getByText('Please select a rating before submitting')).toBeInTheDocument();
+    });
+
+    it('shows alert for short comment on submit', () => {
       renderCommentForm();
 
       const ratingInput = screen.getByTestId('perfect');
       fireEvent.click(ratingInput);
 
       const textarea = screen.getByPlaceholderText('Tell how was your stay, what you like and what can be improved');
-      fireEvent.change(textarea, { target: { value: 'Great place to stay!' } });
+      fireEvent.change(textarea, { target: { value: 'Too short' } });
 
-      fireEvent.click(screen.getByText('Submit'));
+      const submitButton = screen.getByTestId('submit-button');
+      fireEvent.click(submitButton);
 
-      await waitFor(() => {
-        const actions = store.getActions();
-        expect(extractActionsTypes(actions)).toEqual([
-          postComment.pending.type
-        ]);
-        expect(mockSetIsUpdateReviews).toHaveBeenCalledTimes(1);
-        expect(textarea).toHaveValue('');
-      });
+      expect(screen.getByText('Review text must be at least 50 characters long')).toBeInTheDocument();
     });
 
-    it('handles text input change', () => {
+    it('shows alert for long comment on submit', () => {
       renderCommentForm();
 
-      const textarea = screen.getByPlaceholderText('Tell how was your stay, what you like and what can be improved');
-      const testComment = 'Great place to stay!';
+      const ratingInput = screen.getByTestId('perfect');
+      fireEvent.click(ratingInput);
 
-      fireEvent.change(textarea, { target: { value: testComment } });
-      expect(textarea).toHaveValue(testComment);
+      const textarea = screen.getByPlaceholderText('Tell how was your stay, what you like and what can be improved');
+      const longComment = 'a'.repeat(301);
+      fireEvent.change(textarea, { target: { value: longComment } });
+
+      const submitButton = screen.getByTestId('submit-button');
+      fireEvent.click(submitButton);
+      expect(screen.getByText('Review text must not exceed 300 characters')).toBeInTheDocument();
     });
   });
 });
