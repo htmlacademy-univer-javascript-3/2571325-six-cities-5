@@ -1,9 +1,9 @@
 import React, { FormEvent, useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppRoutes } from '../../constants/routers';
-import { loginAction } from '../../store/action';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../store/store';
+import { loginAction } from '../../store/actions/auth-actions/auth-actions';
 
 const LoginPage: React.FC = () => {
   const [formData, setFormData] = useState({

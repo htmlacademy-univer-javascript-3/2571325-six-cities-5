@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom';
 import { AppRoutes } from '../../constants/routers';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store/store';
-import { fetchFavoritesOffers, logoutAction } from '../../store/action';
 import { AuthorizationStatus } from '../../constants/auth';
 import { selectAuthStatus, selectFavoritesOffers, selectIsUpdateOffers, selectUserInfo } from '../../store/selectors/selectors';
+import { fetchFavoritesOffers } from '../../store/actions/offers-actions/offers-actions';
+import { logoutAction } from '../../store/actions/auth-actions/auth-actions';
 
 const Header: React.FC = () => {
   const authorizationStatus = useSelector(selectAuthStatus);

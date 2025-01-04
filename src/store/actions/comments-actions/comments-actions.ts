@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
-import { Actions } from '../../../constants/action';
+import { Actions } from '../../../constants/actions';
 import { Paths } from '../../../constants/paths';
 import { Review } from '../../../types/review';
 import { CommentFormValue } from '../../../components/comment-form/types/comment';

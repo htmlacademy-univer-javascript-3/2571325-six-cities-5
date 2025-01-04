@@ -6,7 +6,7 @@ interface OffersPlugProps {
 }
 
 const OffersPlug: React.FC<OffersPlugProps> = ({ activeCity }) => (
-  <div className="cities">
+  <div className="cities" data-testid='offers-plug'>
     <div className="cities__places-container cities__places-container--empty container">
       <section className="cities__no-places">
         <div className="cities__status-wrapper tabs__content">

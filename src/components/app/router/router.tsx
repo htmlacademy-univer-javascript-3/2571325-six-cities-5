@@ -10,7 +10,7 @@ import OfferPage from '../../../pages/offer-page/offer-page';
 import NotFound from '../../../pages/not-found-page/not-found-page';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../store/store';
-import { checkAuthAction } from '../../../store/action';
+import { checkAuthAction } from '../../../store/actions/auth-actions/auth-actions';
 
 const Router: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
