@@ -11,6 +11,7 @@ import NotFound from '../../../pages/not-found-page/not-found-page';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../store/store';
 import { checkAuthAction } from '../../../store/actions/auth-actions/auth-actions';
+import PublicRoute from '../../public-route/public-route';
 
 const Router: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -23,7 +24,14 @@ const Router: React.FC = () => {
     <BrowserRouter>
       <Routes>
         <Route path={AppRoutes.Default} element={<MainPage cities={Object.values(Cities)} />} />
-        <Route path={AppRoutes.Login} element={<LoginPage />} />
+        <Route
+          path={AppRoutes.Login}
+          element={
+            <PublicRoute>
+              <LoginPage />
+            </PublicRoute>
+          }
+        />
         <Route path={AppRoutes.Favorites} element={(
           <PrivateRouter>
             <FavoritesPage />

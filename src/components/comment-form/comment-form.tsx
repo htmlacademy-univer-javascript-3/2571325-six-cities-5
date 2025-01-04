@@ -14,10 +14,36 @@ const CommentForm: React.FC<CommentFormProps> = ({ offerId, setIsUpdateReviws })
     comment: '',
     rating: 0,
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   const dispatch = useDispatch<AppDispatch>();
 
+  const validateForm = (): boolean => {
+    if (formValue.rating === 0) {
+      setFormError('Please select a rating before submitting');
+      return false;
+    }
+
+    if (formValue.comment.length < 50) {
+      setFormError('Review text must be at least 50 characters long');
+      return false;
+    }
+
+    if (formValue.comment.length > 300) {
+      setFormError('Review text must not exceed 300 characters');
+      return false;
+    }
+
+    setFormError(null);
+    return true;
+  };
+  const isValidComment = formValue.comment.length >= 50 && formValue.comment.length <= 300;
+  const isValidRating = formValue.rating > 0;
+  const isFormValid = isValidComment && isValidRating && !isSubmitting;
+
   const handleRatingChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFormError(null);
     setFormValue((prev) => ({
       ...prev,
       rating: Number(e.target.value) as CommentFormValue['rating'],
@@ -25,14 +51,30 @@ const CommentForm: React.FC<CommentFormProps> = ({ offerId, setIsUpdateReviws })
   };
 
   const handleTextChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setFormError(null);
     setFormValue({ ...formValue, comment: event.target.value });
   };
 
-  const handleSubmitClick = (e : React.MouseEvent<HTMLButtonElement>) => {
+  const handleSubmitClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    dispatch(postComment({formValue, offerId}));
-    setFormValue({ comment: '', rating: 0 });
-    setIsUpdateReviws((prevState) => !prevState);
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    void (async () => {
+      try {
+        await dispatch(postComment({formValue, offerId})).unwrap();
+        setFormValue({ comment: '', rating: 0 });
+        setIsUpdateReviws((prevState) => !prevState);
+      } catch (err) {
+        setFormError(err instanceof Error ? err.message : 'Failed to submit review. Please try again.');
+      } finally {
+        setIsSubmitting(false);
+      }
+    })();
   };
 
   return(
@@ -49,6 +91,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ offerId, setIsUpdateReviws })
               type="radio"
               checked={formValue.rating === star}
               onChange={handleRatingChange}
+              disabled={isSubmitting}
             />
             <label
               htmlFor={`${star}-stars`}
@@ -70,14 +113,24 @@ const CommentForm: React.FC<CommentFormProps> = ({ offerId, setIsUpdateReviws })
         placeholder="Tell how was your stay, what you like and what can be improved"
         value={formValue.comment}
         onChange={handleTextChange}
-      >
-      </textarea>
+        disabled={isSubmitting}
+      />
+      {formError && <p className="form__error">{formError}</p>}
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
           To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">50 characters</b>.
         </p>
-        <button className="reviews__submit form__submit button" type="submit" onClick={handleSubmitClick}>Submit</button>
+        <button
+          className="reviews__submit form__submit button"
+          type="submit"
+          onClick={handleSubmitClick}
+          style={!isFormValid ? { opacity: 0.5 } : {}}
+          data-testid="submit-button"
+        >
+          {isSubmitting ? 'Submitting...' : 'Submit'}
+        </button>
       </div>
+      <div className="reviews__text-amount">{formValue.comment.length} / 300 characters</div>
     </form>
   );
 };
