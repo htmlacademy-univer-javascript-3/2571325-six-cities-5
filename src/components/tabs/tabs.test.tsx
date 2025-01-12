@@ -11,6 +11,7 @@ import { AppThunkDispatch } from '../../store/types';
 import { RootState } from '../../store/store';
 import { createAPI } from '../../api/api';
 import { Actions } from '../../constants/actions';
+import { MemoryRouter } from 'react-router-dom';
 
 describe('Tabs', () => {
   const cities = Object.values(Cities);
@@ -32,7 +33,9 @@ describe('Tabs', () => {
   it('renders all city tabs', () => {
     render(
       <Provider store={store}>
-        <Tabs cities={cities} />
+        <MemoryRouter>
+          <Tabs cities={cities} />
+        </MemoryRouter>
       </Provider>
     );
 
@@ -42,7 +45,9 @@ describe('Tabs', () => {
   it('dispatches changeCity action when clicking on a city tab', () => {
     render(
       <Provider store={store}>
-        <Tabs cities={cities} />
+        <MemoryRouter>
+          <Tabs cities={cities} />
+        </MemoryRouter>
       </Provider>
     );
 
@@ -57,7 +62,9 @@ describe('Tabs', () => {
   it('dispatches changeCity with correct city', () => {
     render(
       <Provider store={store}>
-        <Tabs cities={cities} />
+        <MemoryRouter>
+          <Tabs cities={cities} />
+        </MemoryRouter>
       </Provider>
     );
 

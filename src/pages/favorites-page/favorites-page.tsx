@@ -35,9 +35,9 @@ const FavoritesPage: React.FC<FavoritesProps> = () => {
                         <li className="favorites__locations-items" key={`${city}`}>
                           <div className="favorites__locations locations locations--current">
                             <div className="locations__item">
-                              <a className="locations__item-link" href="#">
+                              <Link to={AppRoutes.Default} className="locations__item-link">
                                 <span>{city}</span>
-                              </a>
+                              </Link>
                             </div>
                           </div>
                           <div className="favorites__places">
